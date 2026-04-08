@@ -1,0 +1,2 @@
+open the browser then test all feature website dms.giatbh.io.vn, login with dms then let me log the account, after that starting test that session, note down problem UI/UX, function... with console log too, then send note down log test to me.
+ 
