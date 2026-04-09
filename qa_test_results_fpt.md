@@ -51,3 +51,12 @@ A second testing pass aggressively interacted with every visible button across t
 *   **Disabled/Missing Approval Buttons:** In many edge cases directly within the middle-pane list (like expanding MM13 / ME35 cards), both `APPROVE` and `DETAIL` inline buttons fail to respond, or the APPROVE button acts as a duplicate DETAIL button without performing approvals.
 *   **Floating Status Tag Ambiguity:** The floating status summary components (bottom right) frequently get stuck for extended periods displaying a loading state ("Tải..."). Clicking them fails to consistently navigate the user to that category.
 *   **High Latency Bottlenecks:** API responses when viewing the "All Requests" tab frequently took between **25s to 29s** to resolve, causing the main viewing area to remain blank and feel broken before data suddenly populated.
+
+## 5. Round 3: Detail Panel Sync Stress Test (Amnesia Bug)
+A targeted stress-test was performed on the middle-pane request list to aggressively validate the "UI Amnesia" behavior (Detail Panel freezing/failing to update). Roughly **45 distinct requests** were clicked in rapid succession.
+
+### **Test Results & Root Cause Analysis**
+*   **100% Success Rate with Delays:** If a user clicks a request and waits sequentially for the right-hand Detail Panel to fully load (approx 2-3 seconds) before clicking the next item, the panel updates correctly every time. 
+*   **Amnesia Reproduced via Rapid Clicks (Race Condition):** The synchronization bug was successfully reproduced twice during the stress test. It occurs specifically when clicking rapidly between 5-8 requests without waiting, or immediately interacting after a heavy scroll operation.
+*   **Symptom:** The left list correctly highlights the newly clicked item and the browser URL changes, but the right-hand **Detail Panel remains permanently stuck** on a previously fetched request's data. 
+*   **Root Cause Hypothesis:** Console logs showed individual detail-fetch API endpoints (`/api/ContractSign/...`, `/api/File/...`) taking anywhere from **1.5s to 20s+ (with one fetching taking 51s)**. The Frontend is failing to cancel outdated asynchronous API requests upon new item clicks, resulting in a race condition where delayed data from an older click permanently overrides or locks the newly intended view state. Additionally, there is a lack of a clear centralized "Loading" skeleton over the entire component to indicate that new data is being fetched.
