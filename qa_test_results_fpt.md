@@ -30,6 +30,10 @@ The following contract types were tested for their approval workflows:
 **Problem:** The "APPROVE" and "REJECT" buttons are positioned at the bottom of the right-hand detail panel.
 **Behavior:** Depending on screen size and request detail length, these buttons are often pushed off-screen. Users might assume they lack permission if they do not explicitly scroll down past all details.
 
+### **Issue 4: Request Tag "Approve" Button Incorrect Navigation** *(High Severity)*
+**Problem:** The inline "Approve" button located directly on a request tag (in the list view) does not trigger the approval action.
+**Behavior:** Instead of approving the request, clicking this button unexpectedly navigates the user to the request detail view. The button acts merely as a navigation link rather than executing its intended action.
+
 ## 3. Console Logs & Technical Observations
 - **Network Requests:** The system correctly pulls data endpoints like `/api/ContractSign/GetApprovedTaskPageOnGoing/...` without structural failures.
 - **JavaScript Stability:** No complete browser crashes or fatal JavaScript exceptions were observed breaking the session.
