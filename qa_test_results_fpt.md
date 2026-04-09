@@ -41,3 +41,13 @@ The following contract types were tested for their approval workflows:
 
 ---
 **Conclusion:** The platform's approval logic is largely functional but suffers from significant UI synchronization issues that may lead to user confusion or accidental double-actions.
+
+## 4. Round 2: Comprehensive Interactivity Testing (All Buttons)
+A second testing pass aggressively interacted with every visible button across the Main Dashboard, Triage Lists, and Detail Pains. 
+
+### **New Critical Issues Found**
+*   **Logout Bug (High Severity):** Clicking the user profile avatar/name in the bottom-left sidebar instantly logs the user out without any confirmation dialogue. 
+*   **Dead Action Buttons (Medium Severity):** The "Generate Report" (Báo cáo) button on the dashboard is completely unresponsive; it triggers no UI change and no terminal/network errors. 
+*   **Disabled/Missing Approval Buttons:** In many edge cases directly within the middle-pane list (like expanding MM13 / ME35 cards), both `APPROVE` and `DETAIL` inline buttons fail to respond, or the APPROVE button acts as a duplicate DETAIL button without performing approvals.
+*   **Floating Status Tag Ambiguity:** The floating status summary components (bottom right) frequently get stuck for extended periods displaying a loading state ("Tải..."). Clicking them fails to consistently navigate the user to that category.
+*   **High Latency Bottlenecks:** API responses when viewing the "All Requests" tab frequently took between **25s to 29s** to resolve, causing the main viewing area to remain blank and feel broken before data suddenly populated.
